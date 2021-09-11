@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
 
     private void EndTutorialCheck(COEStat coe)
     {
-        _enableWhenDone.SetActive(coe.O == 0 && coe.E == 0);
+        _enableWhenDone.SetActive(coe.O == 0);
     }
 
     private void LoadRealTest()

@@ -19,9 +19,10 @@ public class COEStat
     public int O { get; set; }
     public int E { get; set; }
 
-    public void DebugTxt()
+    public string DebugTxt()
     {
         Debug.Log("C:" + C + " | O:" + O + " | E:" + E);
+        return "C:" + C + ", O:" + O + ", E:" + E;
     }
 
     public int RealizationPower => C;

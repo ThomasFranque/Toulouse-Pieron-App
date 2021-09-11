@@ -16,9 +16,10 @@ public struct FatigueStat
     public int Minute { get => _minute; }
     public COEStat COE { get => _COE; }
 
-    public void DebugTxt()
+    public string DebugTxt()
     {
-        Debug.Log(Minute + " - " + "C:" + COE.C + " | O:" + COE.O + " | E:" + COE.E);
+        Debug.Log("C:" + COE.C + " | O:" + COE.O + " | E:" + COE.E);
+        return "C:" + COE.C + " | O:" + COE.O + " | E:" + COE.E;
     }
 
     public int FatigueResistance => _COE.FatigueResistance;

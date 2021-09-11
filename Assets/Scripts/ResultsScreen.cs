@@ -11,7 +11,8 @@ public class ResultsScreen : MonoBehaviour
     //[SerializeField] private TextMeshProUGUI _fatigueResistance;
     [Space]
     [SerializeField] private RectTransform _graphGrid;
-    [SerializeField] private RectTransform _dummyPoint;
+    [SerializeField] private RectTransform _dummyMin;
+    [SerializeField] private TextMeshProUGUI _finalCOE;
 
     private void Start()
     {
@@ -33,48 +34,18 @@ public class ResultsScreen : MonoBehaviour
             _realizationPower.text = rp.ToString() + ": Bom";
         else
             _realizationPower.text = rp.ToString() + ": Muito Bom!";
-
+        _dummyMin.gameObject.SetActive(false);
+        _finalCOE.text = SessionManager.FatigueStats[SessionManager.FatigueStats.Count - 1].COE.DebugTxt();
         GenerateGraph();
     }
 
     private void GenerateGraph()
     {
-        int lowestStat = 9999999;
-
         foreach (FatigueStat f in SessionManager.FatigueStats)
         {
-            int cur = f.FatigueResistance;
-
-            if (cur < lowestStat)
-                lowestStat = cur;
-        }
-
-        _dummyPoint.gameObject.SetActive(false);
-        GraphPoint prev = default;
-        List<GraphPoint> points = new List<GraphPoint>();
-        foreach (FatigueStat f in SessionManager.FatigueStats)
-        {
-            GraphPoint newPoint = Instantiate(_dummyPoint.gameObject, _graphGrid).GetComponent<GraphPoint>();
-            newPoint.gameObject.SetActive(true);
-
-            float yIncrement = (f.FatigueResistance - lowestStat) * 30;
-            newPoint.Init(yIncrement, f.Minute);
-
-            points.Add(newPoint);
-
-            prev = newPoint;
-        }
-
-        StartCoroutine(CDelayBeforeConnect(points));
-    }
-
-    // Delay because unity does not update grid layouts in the same frame (cheeky solution)
-    private IEnumerator CDelayBeforeConnect(List<GraphPoint> points)
-    {
-        foreach (GraphPoint p in points)
-        {
-            yield return new WaitForSeconds(0.2f);
-            p.Connect();
+            GameObject go = Instantiate(_dummyMin.gameObject, _graphGrid);
+            go.SetActive(true);
+            go.GetComponent<GraphMinute>().Initialize(f.Minute.ToString(), f.FatigueResistance.ToString(), f.COE.DebugTxt());
         }
     }
 
